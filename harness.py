@@ -934,7 +934,11 @@ class Agent:
         )
       left = self.session.time_left()
       if left is not None:
-        self.messages[-1]["content"] += f"\n[{int(left // 60)} minutes left]"
+        # Mark the clock as meta-information: a weak model otherwise copies
+        # the annotation into the deliverable it is writing.
+        self.messages[-1]["content"] += (
+            f"\n[system note, not file content: {int(left // 60)} minutes left]"
+        )
       if self.prompt_tokens > self.compact_at():
         await self.compact()
 
